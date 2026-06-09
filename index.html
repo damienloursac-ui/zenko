@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zenko — La ville, autrement.</title>
+<style>
+  :root {
+    --black:  #0A0A0A;
+    --dkgreen:#1A4A3A;
+    --jade:   #2D7A5F;
+    --jade2:  #3A9470;
+    --gold:   #C9A84C;
+    --gold2:  #E8C46A;
+    --cream:  #F7F4EE;
+    --white:  #FFFFFF;
+    --gray:   #8898AA;
+    --lgray:  #F2F2F2;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--black);
+    color: var(--white);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.1rem 5%;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+  }
+  .logo {
+    font-size: 1.5rem; font-weight: 800; letter-spacing: 0.08em;
+    color: var(--white); text-decoration: none;
+  }
+  .logo span { color: var(--gold); }
+  nav ul { list-style: none; display: flex; gap: 2rem; }
+  nav a { color: var(--cream); text-decoration: none; font-size: 0.9rem; opacity: 0.8; transition: opacity .2s; }
+  nav a:hover { opacity: 1; color: var(--gold); }
+  .nav-cta {
+    background: var(--jade); color: var(--white) !important; opacity: 1 !important;
+    padding: 0.5rem 1.2rem; border-radius: 6px; font-weight: 600; transition: background .2s !important;
+  }
+  .nav-cta:hover { background: var(--jade2) !important; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
+    padding: 8rem 5% 4rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-orb {
+    position: absolute; border-radius: 50%; pointer-events: none;
+  }
+  .orb1 { width: 520px; height: 520px; right: -80px; top: -100px; background: var(--dkgreen); opacity: 0.7; }
+  .orb2 { width: 320px; height: 320px; right: 60px;  top: 40px;  background: var(--gold);    opacity: 0.18; }
+  .orb3 { width: 200px; height: 200px; left: 20%;   bottom: 10%; background: var(--jade);    opacity: 0.12; }
+
+  .hero-tag {
+    display: inline-block;
+    background: rgba(45,122,95,0.25); border: 1px solid rgba(45,122,95,0.5);
+    color: var(--gold2); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em;
+    padding: 0.35rem 1rem; border-radius: 100px; margin-bottom: 1.5rem;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 900; line-height: 1.05;
+    max-width: 700px; margin-bottom: 1.5rem;
+  }
+  .hero h1 em { font-style: normal; color: var(--gold); }
+  .hero p {
+    font-size: 1.15rem; color: var(--cream); max-width: 540px;
+    margin-bottom: 2.5rem; opacity: 0.85;
+  }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--jade); color: var(--white);
+    padding: 0.85rem 2rem; border-radius: 8px;
+    font-weight: 700; font-size: 1rem; text-decoration: none;
+    transition: background .2s, transform .15s;
+  }
+  .btn-primary:hover { background: var(--jade2); transform: translateY(-2px); }
+  .btn-outline {
+    border: 1.5px solid var(--gold); color: var(--gold);
+    padding: 0.85rem 2rem; border-radius: 8px;
+    font-weight: 600; font-size: 1rem; text-decoration: none;
+    transition: background .2s, transform .15s;
+  }
+  .btn-outline:hover { background: rgba(201,168,76,0.1); transform: translateY(-2px); }
+
+  .hero-stats {
+    display: flex; gap: 3rem; margin-top: 4rem;
+    border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;
+  }
+  .stat-num { font-size: 2rem; font-weight: 800; color: var(--gold); }
+  .stat-label { font-size: 0.82rem; color: var(--gray); margin-top: 0.1rem; }
+
+  /* ── SECTIONS ── */
+  section { padding: 6rem 5%; }
+
+  .section-tag {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--jade2); margin-bottom: 0.8rem;
+  }
+  .section-title {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800; line-height: 1.15; margin-bottom: 1rem;
+  }
+  .section-sub {
+    font-size: 1.05rem; color: var(--gray); max-width: 580px; margin-bottom: 3rem;
+  }
+
+  /* ── PROBLÈME ── */
+  #probleme { background: var(--cream); color: var(--black); }
+  #probleme .section-title { color: var(--black); }
+  #probleme .section-sub { color: #555; }
+
+  .cards-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+  .card {
+    background: var(--white); border-radius: 16px; padding: 2rem;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
+  .card-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .card h3 { font-size: 1.05rem; font-weight: 700; color: var(--black); margin-bottom: 0.5rem; }
+  .card p { font-size: 0.9rem; color: #666; line-height: 1.6; }
+
+  /* ── SOLUTION ── */
+  #solution { background: var(--black); }
+  .features-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;
+  }
+  .feature-card {
+    background: var(--dkgreen); border-radius: 14px; padding: 1.8rem;
+    transition: transform .2s;
+  }
+  .feature-card:hover { transform: translateY(-3px); }
+  .feature-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+  .feature-card h3 { font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 0.5rem; }
+  .feature-card p { font-size: 0.88rem; color: var(--cream); opacity: 0.85; }
+
+  /* ── OFFICES DE TOURISME ── */
+  #offices {
+    background: linear-gradient(135deg, var(--dkgreen) 0%, #0f2e22 100%);
+  }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  .two-col.reverse > *:first-child { order: 2; }
+  .two-col.reverse > *:last-child  { order: 1; }
+
+  .highlight-box {
+    background: rgba(0,0,0,0.25); border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 16px; padding: 2.5rem;
+  }
+  .highlight-box h3 { font-size: 1.4rem; font-weight: 800; color: var(--gold); margin-bottom: 1.5rem; }
+  .check-list { list-style: none; display: flex; flex-direction: column; gap: 0.9rem; }
+  .check-list li { display: flex; gap: 0.8rem; font-size: 0.95rem; color: var(--cream); }
+  .check-list li::before { content: "✓"; color: var(--gold); font-weight: 800; flex-shrink: 0; }
+
+  .big-quote {
+    font-size: clamp(1.5rem, 3.5vw, 2.4rem);
+    font-weight: 800; line-height: 1.2; color: var(--white); margin-bottom: 1.5rem;
+  }
+  .big-quote em { color: var(--gold); font-style: normal; }
+
+  /* ── COMMERÇANTS ── */
+  #commercants { background: var(--black); }
+
+  .pricing-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem; }
+  .pricing-card {
+    border-radius: 14px; padding: 1.8rem; text-align: center;
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  .pricing-card.free     { background: #1a1a1a; border: 1px solid #333; }
+  .pricing-card.essentiel{ background: var(--dkgreen); }
+  .pricing-card.boost    { background: var(--jade); }
+  .pricing-card.premium  { background: #111; border: 1.5px solid var(--gold); }
+  .pricing-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray); }
+  .pricing-card.premium .pricing-label { color: var(--gold2); }
+  .pricing-price { font-size: 1.8rem; font-weight: 900; color: var(--white); }
+  .pricing-card.premium .pricing-price { color: var(--gold); }
+  .pricing-price span { font-size: 0.85rem; font-weight: 400; opacity: 0.7; }
+  .pricing-perks { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem; }
+  .pricing-perks li { font-size: 0.85rem; color: var(--cream); opacity: 0.85; }
+
+  .ai-callout {
+    background: linear-gradient(135deg, var(--dkgreen), #0f2e22);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 16px; padding: 2.5rem; margin-top: 2.5rem;
+    display: flex; gap: 1.5rem; align-items: flex-start;
+  }
+  .ai-callout-icon { font-size: 2.5rem; flex-shrink: 0; }
+  .ai-callout h3 { font-size: 1.1rem; font-weight: 700; color: var(--gold); margin-bottom: 0.5rem; }
+  .ai-callout p  { font-size: 0.9rem; color: var(--cream); opacity: 0.85; }
+
+  /* ── FONCTIONNEMENT ── */
+  #fonctionnement { background: var(--cream); color: var(--black); }
+  #fonctionnement .section-title { color: var(--black); }
+  #fonctionnement .section-sub { color: #555; }
+
+  .steps { display: flex; flex-direction: column; gap: 0; max-width: 720px; margin: 0 auto; }
+  .step { display: flex; gap: 1.5rem; padding: 1.5rem 0; position: relative; }
+  .step:not(:last-child)::after {
+    content: ''; position: absolute; left: 1.1rem; top: 3.5rem; bottom: 0;
+    width: 2px; background: #ddd;
+  }
+  .step-num {
+    width: 2.2rem; height: 2.2rem; border-radius: 50%; flex-shrink: 0;
+    background: var(--jade); color: var(--white); font-weight: 800;
+    display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
+    position: relative; z-index: 1;
+  }
+  .step-content h3 { font-size: 1.05rem; font-weight: 700; color: var(--black); margin-bottom: 0.3rem; }
+  .step-content p { font-size: 0.9rem; color: #555; }
+
+  /* ── MARCHÉ ── */
+  #marche { background: var(--black); }
+  .stats-row { display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 3rem; }
+  .stat-big { text-align: center; flex: 1; min-width: 160px; }
+  .stat-big .num { font-size: 3rem; font-weight: 900; color: var(--gold); line-height: 1; }
+  .stat-big .lbl { font-size: 0.85rem; color: var(--gray); margin-top: 0.4rem; }
+
+  .territory {
+    background: var(--dkgreen); border-radius: 14px; padding: 2rem;
+    display: flex; gap: 1rem; align-items: center;
+  }
+  .territory-icon { font-size: 2rem; }
+  .territory h3 { font-size: 1rem; font-weight: 700; color: var(--gold); }
+  .territory p { font-size: 0.88rem; color: var(--cream); opacity: 0.85; }
+
+  /* ── CTA FINAL ── */
+  #contact {
+    background: var(--black);
+    text-align: center; padding: 8rem 5%;
+    position: relative; overflow: hidden;
+  }
+  .cta-orb1 { position: absolute; width: 400px; height: 400px; border-radius: 50%; left: -100px; top: -100px; background: var(--dkgreen); opacity: 0.5; }
+  .cta-orb2 { position: absolute; width: 300px; height: 300px; border-radius: 50%; right: -80px;  bottom: -80px; background: var(--gold); opacity: 0.1; }
+  #contact .section-title { color: var(--white); font-size: clamp(2rem, 5vw, 3.5rem); }
+  #contact .section-sub { color: var(--cream); margin: 1rem auto 2.5rem; opacity: 0.8; }
+  .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .cta-btns .btn-primary { font-size: 1.05rem; padding: 1rem 2.5rem; }
+  .cta-btns .btn-outline  { font-size: 1.05rem; padding: 1rem 2.5rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #050505; border-top: 1px solid #1a1a1a;
+    padding: 2rem 5%; display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  footer .logo { font-size: 1.1rem; }
+  footer p { font-size: 0.8rem; color: var(--gray); }
+  footer a { color: var(--jade2); text-decoration: none; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav ul { display: none; }
+    .two-col { grid-template-columns: 1fr; gap: 2rem; }
+    .two-col.reverse > * { order: unset !important; }
+    .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+    .stats-row { gap: 1rem; }
+  }
+
+  /* ── SCROLL ANIMATION ── */
+  [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+  [data-reveal].visible { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">zen<span>k</span>o</a>
+  <ul>
+    <li><a href="#offices">Offices de tourisme</a></li>
+    <li><a href="#commercants">Commerçants</a></li>
+    <li><a href="#fonctionnement">Comment ça marche</a></li>
+    <li><a href="#contact" class="nav-cta">Rejoindre Zenko</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-orb orb1"></div>
+  <div class="hero-orb orb2"></div>
+  <div class="hero-orb orb3"></div>
+
+  <div class="hero-tag">🗺️ La plateforme IA du tourisme local</div>
+
+  <div class="hero">
+    <h1>La ville,<br><em>autrement.</em></h1>
+    <p>Zenko connecte les touristes, les commerçants et les offices de tourisme grâce à une app IA personnalisée par ville — déployée en 5 jours.</p>
+    <div class="hero-btns">
+      <a href="#offices" class="btn-primary">Je suis un office de tourisme</a>
+      <a href="#commercants" class="btn-outline">Je suis un commerçant</a>
+    </div>
+  </div>
+
+  <div class="hero-stats" data-reveal>
+    <div>
+      <div class="stat-num">90M</div>
+      <div class="stat-label">touristes/an en France</div>
+    </div>
+    <div>
+      <div class="stat-num">1 200</div>
+      <div class="stat-label">offices de tourisme</div>
+    </div>
+    <div>
+      <div class="stat-num">5 jours</div>
+      <div class="stat-label">pour déployer votre app</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLÈME -->
+<section id="probleme">
+  <div class="section-tag">Le constat</div>
+  <h2 class="section-title">Le tourisme local mérite mieux.</h2>
+  <p class="section-sub">Les outils actuels ne sont pas faits pour les destinations locales. Ni pour les commerçants qui les font vivre.</p>
+
+  <div class="cards-3" data-reveal>
+    <div class="card">
+      <div class="card-icon">🧭</div>
+      <h3>Les touristes sont perdus</h3>
+      <p>Google Maps, TripAdvisor, guides papier… Trop d'infos éparpillées, aucun guide local intelligent qui connaît vraiment la ville.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🏪</div>
+      <h3>Les commerçants sont invisibles</h3>
+      <p>Les petits commerces locaux n'ont pas les moyens ni les outils pour capter les touristes de passage — même quand ils sont à 50 mètres.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📊</div>
+      <h3>Les offices manquent de données</h3>
+      <p>Aucune visibilité sur ce que cherchent vraiment les visiteurs, ni sur l'impact réel de leurs actions de communication.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section id="solution">
+  <div class="section-tag">La solution</div>
+  <h2 class="section-title">Une app IA par ville,<br>en quelques jours.</h2>
+  <p class="section-sub">Zenko déploie une application web personnalisée aux couleurs de chaque ville, propulsée par l'intelligence artificielle.</p>
+
+  <div class="features-grid" data-reveal>
+    <div class="feature-card">
+      <div class="feature-icon">🗺️</div>
+      <h3>Carte interactive</h3>
+      <p>Monuments, restaurants, bars, événements — tout sur une carte fluide et intuitive, dans les couleurs de votre territoire.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🤖</div>
+      <h3>Guide IA multilingue</h3>
+      <p>Un chatbot répond aux touristes en langage naturel : itinéraires sur-mesure, recommandations personnalisées, détection automatique de la langue.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📈</div>
+      <h3>Analytics en temps réel</h3>
+      <p>Tableau de bord pour l'office de tourisme : ce que cherchent les visiteurs, les POI les plus consultés, les tendances saisonnières.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⭐</div>
+      <h3>Visibilité commerçants</h3>
+      <p>Les commerces locaux apparaissent sur la carte et dans les réponses de l'IA — une visibilité ciblée qu'aucun autre outil ne propose.</p>
+    </div>
+  </div>
+</section>
+
+<!-- OFFICES DE TOURISME -->
+<section id="offices">
+  <div class="two-col">
+    <div data-reveal>
+      <div class="section-tag">Pour les offices de tourisme</div>
+      <p class="big-quote">Votre territoire mérite une app <em>à sa hauteur.</em></p>
+      <p style="color:var(--cream);opacity:.85;margin-bottom:2rem;">Zenko devient votre outil numérique de valorisation territoriale — aux couleurs de votre ville, déployé en 5 jours, sans aucun coût.</p>
+      <a href="#contact" class="btn-primary">Devenir ville pilote →</a>
+    </div>
+    <div data-reveal>
+      <div class="highlight-box">
+        <h3>Ce que vous obtenez</h3>
+        <ul class="check-list">
+          <li>Application web personnalisée aux couleurs de votre territoire</li>
+          <li>Guide IA qui répond aux touristes en leur nom</li>
+          <li>Tableau de bord analytics : intentions, flux, comportements</li>
+          <li>QR codes imprimables pour hôtels, offices, panneaux</li>
+          <li>Mise à jour du contenu en autonomie</li>
+          <li>Aucun coût d'abonnement — Zenko est financé par les commerçants</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMERÇANTS -->
+<section id="commercants">
+  <div class="section-tag">Pour les commerçants</div>
+  <h2 class="section-title">Soyez là quand le touriste cherche.</h2>
+  <p class="section-sub">Apparaissez sur la carte Zenko et dans les réponses du guide IA — au moment exact où un visiteur cherche où manger, boire ou se détendre.</p>
+
+  <div class="pricing-row" data-reveal>
+    <div class="pricing-card free">
+      <div class="pricing-label">Listing</div>
+      <div class="pricing-price">Gratuit</div>
+      <ul class="pricing-perks">
+        <li>Nom + adresse sur la carte</li>
+      </ul>
+    </div>
+    <div class="pricing-card essentiel">
+      <div class="pricing-label">Essentiel</div>
+      <div class="pricing-price">19€<span>/mois</span></div>
+      <ul class="pricing-perks">
+        <li>Photos & horaires</li>
+        <li>Lien site web</li>
+        <li>Description complète</li>
+      </ul>
+    </div>
+    <div class="pricing-card boost">
+      <div class="pricing-label">Boost</div>
+      <div class="pricing-price">49€<span>/mois</span></div>
+      <ul class="pricing-perks">
+        <li>Mise en avant sur la carte</li>
+        <li>Badge "Recommandé"</li>
+        <li>Tout Essentiel inclus</li>
+      </ul>
+    </div>
+    <div class="pricing-card premium">
+      <div class="pricing-label">Premium</div>
+      <div class="pricing-price">99€<span>/mois</span></div>
+      <ul class="pricing-perks">
+        <li>Réponses du guide IA</li>
+        <li>Analytics visiteurs</li>
+        <li>Promotions push</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ai-callout" data-reveal>
+    <div class="ai-callout-icon">🤖</div>
+    <div>
+      <h3>La vraie différence : les réponses IA</h3>
+      <p>Quand un touriste demande <em>"où manger une bonne raclette ce soir ?"</em>, le guide Zenko répond en citant votre restaurant — pas Google Maps. Les abonnés Premium apparaissent directement dans ces réponses. C'est une visibilité ultra-ciblée, au moment où le visiteur est prêt à dépenser.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FONCTIONNEMENT -->
+<section id="fonctionnement">
+  <div class="section-tag">Le processus</div>
+  <h2 class="section-title">Déployé en 5 jours.</h2>
+  <p class="section-sub">Pas besoin d'une équipe technique. Zenko gère tout, de la personnalisation au lancement.</p>
+
+  <div class="steps" data-reveal>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>Partenariat avec l'office de tourisme</h3>
+        <p>Un appel de 30 minutes suffit pour cadrer le projet. Zenko s'occupe de tout le reste — gratuitement.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>Personnalisation de l'app</h3>
+        <p>Couleurs, logo, contenu, points d'intérêt — l'app est configurée aux couleurs exactes de votre ville.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>Onboarding des commerçants</h3>
+        <p>Zenko démarre l'inscription des commerces locaux. Le listing de base est gratuit et immédiat.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h3>Lancement & QR codes</h3>
+        <p>L'app est en ligne. Des QR codes imprimables sont fournis pour les hôtels, panneaux et l'office de tourisme.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h3>Les touristes explorent</h3>
+        <p>Le guide IA prend le relais, répond aux questions, suggère des itinéraires et oriente vers les commerçants locaux.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARCHÉ -->
+<section id="marche">
+  <div class="section-tag">Le marché</div>
+  <h2 class="section-title">Un potentiel immense,<br>un ancrage local.</h2>
+  <p class="section-sub">Zenko démarre en Drôme-Ardèche et s'étend progressivement à toute la région, puis à la France.</p>
+
+  <div class="stats-row" data-reveal>
+    <div class="stat-big"><div class="num">90M</div><div class="lbl">touristes/an en France</div></div>
+    <div class="stat-big"><div class="num">1 200</div><div class="lbl">offices de tourisme</div></div>
+    <div class="stat-big"><div class="num">300k+</div><div class="lbl">commerces en zones touristiques</div></div>
+    <div class="stat-big"><div class="num">2 900€</div><div class="lbl">revenus/mois dès la 1ère ville</div></div>
+  </div>
+
+  <div class="territory" data-reveal>
+    <div class="territory-icon">📍</div>
+    <div>
+      <h3>Démarrage : Drôme · Ardèche · Auvergne-Rhône-Alpes</h3>
+      <p>Ancrage territorial fort, réseau local, déploiement progressif. 10 villes visées en 2026, 50 à l'horizon 2027.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section id="contact">
+  <div class="cta-orb1"></div>
+  <div class="cta-orb2"></div>
+  <div style="position:relative;z-index:1;">
+    <div class="section-tag" style="color:var(--gold2);">Rejoignez l'aventure</div>
+    <h2 class="section-title">Faites de votre ville<br>une destination intelligente.</h2>
+    <p class="section-sub" style="margin:1rem auto 2.5rem;">Que vous soyez un office de tourisme cherchant à moderniser votre offre numérique, ou un commerçant qui veut capter plus de touristes — Zenko est fait pour vous.</p>
+    <div class="cta-btns">
+      <a href="mailto:contact@zenko.io?subject=Ville pilote Zenko" class="btn-primary">Devenir ville pilote</a>
+      <a href="mailto:contact@zenko.io?subject=Référencer mon commerce Zenko" class="btn-outline">Référencer mon commerce</a>
+    </div>
+    <p style="margin-top:2.5rem;color:var(--gray);font-size:0.85rem;">
+      contact@zenko.io · <strong style="color:var(--gold)">Damien Loursac</strong> · +33 6 07 78 69 71
+    </p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="logo">zen<span>k</span>o</a>
+  <p>© 2025 Zenko. La ville, autrement.</p>
+  <p>Fait avec ❤️ depuis la Drôme · <a href="mailto:contact@zenko.io">contact@zenko.io</a></p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
